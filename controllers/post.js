@@ -1,4 +1,3 @@
-const post = require("../models/post");
 const Post = require("../models/post");
 const mongoose = require("mongoose");
 
@@ -141,11 +140,13 @@ exports.delete = async (req, res) => {
     }
 
     const deletedPost = await Post.findByIdAndDelete(id).exec();
-    if (deletedPost) {
+
+    if (!deletedPost) {
       return res
         .status(500)
         .json({ error: "deletion failed. something went wrong" });
     }
+
     return res.status(200).json({ message: "post deleted" });
   } catch (error) {
     return res

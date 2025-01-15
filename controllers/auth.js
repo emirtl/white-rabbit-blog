@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, isAdmin } = req.body;
 
     if (!username || !email || !password) {
       return res.status(401).json({ error: "body is needed" });
@@ -28,6 +28,7 @@ exports.register = async (req, res) => {
       username,
       email,
       password: hashedPss,
+      isAdmin,
     });
 
     user = await user.save();
@@ -79,6 +80,9 @@ exports.login = async (req, res) => {
       {
         email: existedUser.email,
         id: existedUser.id,
+        isAdmin: existedUser.isAdmin,
+        username: existedUser.username,
+        expiresIn: 18000,
       },
       process.env.JWT_SECRET,
       { algorithm: "HS256", expiresIn: 18000 }

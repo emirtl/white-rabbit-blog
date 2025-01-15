@@ -40,11 +40,13 @@ app.use("/public/uploads", express.static(path.join("public/uploads")));
 //routes
 const authRoutes = require("./routes/auth");
 const postsRoutes = require("./routes/post");
+const categoriesRoutes = require("./routes/category");
 
 const errorHandler = require("./middleware/error");
 
 app.use(`${process.env.API}/auth`, authRoutes);
 app.use(`${process.env.API}/posts`, postsRoutes);
+app.use(`${process.env.API}/categories`, categoriesRoutes);
 
 app.use(errorHandler);
 

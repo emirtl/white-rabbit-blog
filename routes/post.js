@@ -7,6 +7,8 @@ const router = express.Router();
 const controller = require("../controllers/post");
 
 const path = require("path");
+const isAuth = require("../middleware/isAuth");
+const isAdmin = require("../middleware/isAdmin");
 
 const MIME_TYPE = {
   "image/jpg": "jpg",
@@ -41,14 +43,24 @@ router.get("/getAll", controller.getAll);
 
 router.get("/getOne/:id", controller.getOne);
 
-router.post("/insert", multer({ storage }).single("image"), controller.insert);
+//! api's that need admin authorization
+
+router.post(
+  "/insert",
+  isAuth,
+  isAdmin,
+  multer({ storage }).single("image"),
+  controller.insert
+);
 
 router.put(
   "/update/:id",
+  isAuth,
+  isAdmin,
   multer({ storage }).single("image"),
   controller.update
 );
 
-router.delete("/delete/:id", controller.delete);
+router.delete("/delete/:id", isAuth, isAdmin, controller.delete);
 
 module.exports = router;
